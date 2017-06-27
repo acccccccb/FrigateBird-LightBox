@@ -1,7 +1,7 @@
 # FrigateBird-LightBox
 
-#### 版本：##v1.0.0
-#### 网站：##http://www.python-pro.com
+#### 版本：v1.0.0
+#### 网站：http://www.python-pro.com
 #### 使用说明：
 + 下载zip文件
 + 在head部分引入css文件
