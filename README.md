@@ -1,5 +1,5 @@
 # FrigateBird-LightBox
-![FrigateBird-LightBox](http://python-pro.com/wp-content/uploads/2017/06/20170627164807_55485.jpg)
+![FrigateBird-LightBox](https://raw.githubusercontent.com/futureis404/FrigateBird-LightBox/master/gallery-img/thumb.jpg)
 #### 版本：v1.0.0
 #### 网站：http://www.python-pro.com
 #### 使用说明：
