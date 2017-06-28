@@ -9,11 +9,9 @@
   cursor:zoom-out;
   position: relative;
   line-height:0;
-border:1px solid #ccc;
 }
  .ImgBox>img {
     max-height:500px;
-    width:100%;
   	box-shadow:0 0 5px #999 inset;
   }
 .ImgNumber {
@@ -39,10 +37,9 @@ border:1px solid #ccc;
 .ImgListBox {
   width:600px;
   height:86px;
-  margin-bottom:5px;
   overflow:hidden;
   clear:both;
-  margin-top:10px;
+  margin:10px auto 5px auto;
 }
   .ImgListBox>.ViewImgList {
     width:100px;
@@ -69,8 +66,10 @@ border:1px solid #ccc;
 	opacity: 0.6;
 	width:50px;
 	height:50px;
-	margin-top:33%;
+    position: absolute;
 	cursor: pointer;
+   top:50%;
+  margin-top:-25px;
 }
 .ImgPrev:hover,.ImgNext:hover {
 	opacity: 1;
@@ -80,12 +79,10 @@ border:1px solid #ccc;
 	height:50px;
   }
 .ImgPrev {
-  float:left;
-  margin-left:-100px;
+  left:-70px;
 }
 .ImgNext {
-  float:right;
-  margin-right:-100px;
+  right:-70px;
 }
 
 .ImgWindow {
@@ -98,7 +95,7 @@ border:1px solid #ccc;
   border:1px solid transparent;
   box-shadow: 0 1px 3px rgba(0,0,0,.3);
   text-align:center;
-display:none;
+  display:none;
 }
   .ImgWindow>.ImgBox>img {
     max-width:600px;

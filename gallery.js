@@ -13,7 +13,6 @@ $(document).ready(function(){
     var ViewImgObj = [];
     var JSONIndex = -1;
     var ViewImgHtml = '';
-
 	function ImgFlash() {
 		$(".ImgBox").stop(true).fadeOut(ImgBoxFlash).fadeIn(ImgBoxFlash);
     }
@@ -33,9 +32,6 @@ $(document).ready(function(){
         AlertHtml +='</div>';
         AlertHtml +='</div>';
         $('body').append(AlertHtml);
-        var ImgWindowWidth = -$('.ImgWindow').outerWidth(true)/2;
-        var ImgWindowHeight = -$('.ImgWindow').outerWidth(true)/2;
-        $('.ImgWindow').css({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
         $(".mask").fadeIn(OpenBox,function(){
 			$('.ImgWindow').fadeIn(OpenBox);
 		});
@@ -46,7 +42,13 @@ $(document).ready(function(){
             $(".imgmask,.ImgWindow").remove();
         });
     }
-
+    //调整位置
+    function MoveTo(){
+        var ImgWindowWidth = -$('.ImgWindow>.ImgBox').outerWidth(true)/2 - 41 ;
+        var ImgWindowHeight = -$('.ImgWindow>.ImgBox').outerHeight(true)/2 - 81.5;
+        $('.ImgWindow').stop().animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
+        console.log('宽度：' + ImgWindowWidth + '高度：' + ImgWindowHeight);
+    }
     //点击下方缩略图显示对应图片
     $(document).on('click','.ViewImgList',function(){
 		ImgFlash();
@@ -59,6 +61,7 @@ $(document).ready(function(){
         var ViewImgListIndex5 = $(this).index() + 2;
         var ViewImgListLength = $('.ViewImgList').length;
         $('.ImgBox').children('img').attr('src',''+ ViewImgListSrc +'');
+        MoveTo();
         $('.ImgText').text(''+ ViewImgListTit +'');
         $(this).addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
         if(ViewImgListIndex1<=0 || ViewImgListIndex5>=ViewImgListLength ) {
@@ -119,6 +122,7 @@ $(document).ready(function(){
 				$('.ImgNumber').text(FocusImgIndex + ' / '+ $('.ViewImgList').length);
             }
         });
+        MoveTo();
     });
     //下一张图
     $('body').on('click','.ImgNext',function(){
@@ -146,6 +150,7 @@ $(document).ready(function(){
 				$('.ImgNumber').text(FocusImgIndex + ' / '+ $('.ViewImgList').length);
             }
         });
+        MoveTo();
     });
 
     $('body').on('click','.closeBtnIco,.CloseBtn,.mask,.ImgBox',function(){
@@ -157,6 +162,10 @@ $(document).ready(function(){
         ImgTit = $(this).attr('alt');
         ImgText = '<img src="' + deviceImg + '" />';
         ImgWindow();
+        var ImgWindowWidth = -$('.ImgWindow').outerWidth(true)/2 - 20 ;
+        var ImgWindowHeight = -$('.ImgWindow').outerHeight(true)/2 - 10;
+        $('.ImgWindow').animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
+        console.log('宽度：' + ImgWindowWidth + '高度：' + ImgWindowHeight);
         var Temp1ImgUrl = $(this).attr('src');
         $.each(ViewImgObj,function(index, content){
             if(content.url==Temp1ImgUrl){
