@@ -7,12 +7,46 @@
 */
 $(document).ready(function(){
 	var ImgBoxFlash = 300; //闪烁时间
-	var OpenBox = 500; //打开
-	var CloseBox = 500; //关闭
+	var OpenBox = 500; //打开时间
+	var CloseBox = 500; //关闭时间
+    var scale;//缩放大小
+    if(document.body.clientWidth >=992){
+        scale = 1;
+    } else if(document.body.clientWidth >= 768 && document.body.clientWidth < 992) {
+        scale = 0.7;
+    } else if(document.body.clientWidth >= 440 && document.body.clientWidth < 768) {
+        scale = 0.6;
+    } else if(document.body.clientWidth < 440) {
+        scale = 0.4;
+    }
+
     var ImgText,ImgTit;
     var ViewImgObj = [];
     var JSONIndex = -1;
     var ViewImgHtml = '';
+    //初始化数据
+    function LoadIni() {
+        $('.ImgBox>img').css({
+            'max-height':500 * scale + 'px'
+        });
+        $('.ImgWindow>.ImgBox>img').css({
+            'max-width':600 * scale + 'px'
+        });
+        $('.ImgListBox').css({
+            'width': 600 * scale +'px',
+            'height':86 * scale + 'px'
+        });
+        $('.ImgListBox>.ViewImgList').css({
+            'width':100 * scale + 'px',
+            'height':70 * scale + 'px',
+            'margin':4 * scale + 'px',
+            'padding':4 * scale + 'px'
+
+        });
+        $('.ImgWindow').css({
+            'padding':20 * scale + 'px'
+        });
+    }
 	function ImgFlash() {
 		$(".ImgBox").stop(true).fadeOut(ImgBoxFlash).fadeIn(ImgBoxFlash);
     }
@@ -44,10 +78,11 @@ $(document).ready(function(){
     }
     //调整位置
     function MoveTo(){
-        var ImgWindowWidth = -$('.ImgWindow>.ImgBox').outerWidth(true)/2 - 41 ;
-        var ImgWindowHeight = -$('.ImgWindow>.ImgBox').outerHeight(true)/2 - 81.5;
+        var ImgWindowWidth = (-$('.ImgWindow>.ImgBox').outerWidth(true)/2 - 41) * scale;
+        var ImgWindowHeight = (-$('.ImgWindow>.ImgBox').outerHeight(true)/2 - 81.5) * scale;
         $('.ImgWindow').stop().animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
         console.log('宽度：' + ImgWindowWidth + '高度：' + ImgWindowHeight);
+        LoadIni();
     }
     //点击下方缩略图显示对应图片
     $(document).on('click','.ViewImgList',function(){
@@ -162,8 +197,8 @@ $(document).ready(function(){
         ImgTit = $(this).attr('alt');
         ImgText = '<img src="' + deviceImg + '" />';
         ImgWindow();
-        var ImgWindowWidth = -$('.ImgWindow').outerWidth(true)/2 - 20 ;
-        var ImgWindowHeight = -$('.ImgWindow').outerHeight(true)/2 - 10;
+        var ImgWindowWidth = (-$('.ImgWindow').outerWidth(true)/2 - 20) * scale ;
+        var ImgWindowHeight = (-$('.ImgWindow').outerHeight(true)/2 - 10) * scale;
         $('.ImgWindow').animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
         console.log('宽度：' + ImgWindowWidth + '高度：' + ImgWindowHeight);
         var Temp1ImgUrl = $(this).attr('src');
@@ -194,6 +229,7 @@ $(document).ready(function(){
 				$('.ImgNumber').text(FocusImgIndex + ' / '+ $('.ViewImgList').length);
             }
         });
+        LoadIni();
 		return false;
     });
 });
