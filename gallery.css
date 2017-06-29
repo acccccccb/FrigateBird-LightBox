@@ -5,6 +5,9 @@
 	Website:	http://www.python-pro.com
 	GitHub:		https://github.com/futureis404/FrigateBird-LightBox
 */
+.ImgWindow {
+  transform:scale(0.5,0.5);
+}
 .ImgBox {
   cursor:zoom-out;
   position: relative;
