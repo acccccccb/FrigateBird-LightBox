@@ -9,16 +9,16 @@ $(document).ready(function(){
 	var ImgBoxFlash = 300; //闪烁时间
 	var OpenBox = 500; //打开时间
 	var CloseBox = 500; //关闭时间
-    var scale;//缩放大小
-    if(document.body.clientWidth >=992){
-        scale = 1;
-    } else if(document.body.clientWidth >= 768 && document.body.clientWidth < 992) {
-        scale = 0.7;
-    } else if(document.body.clientWidth >= 440 && document.body.clientWidth < 768) {
-        scale = 0.6;
-    } else if(document.body.clientWidth < 440) {
-        scale = 0.4;
-    }
+    var scale = 1;//缩放大小
+    //if(document.body.clientWidth >=992){
+    //    scale = 1;
+    //} else if(document.body.clientWidth >= 768 && document.body.clientWidth < 992) {
+    //    scale = 0.7;
+    //} else if(document.body.clientWidth >= 440 && document.body.clientWidth < 768) {
+    //    scale = 0.6;
+    //} else if(document.body.clientWidth < 440) {
+    //    scale = 0.4;
+    //}
 
     var ImgText,ImgTit;
     var ViewImgObj = [];
@@ -32,7 +32,7 @@ $(document).ready(function(){
         $('.ImgWindow>.ImgBox>img').css({
             'max-width':600 * scale + 'px'
         });
-        $('.ImgListBox').css({
+        $('.ImgListBoxMain').css({
             'width': 600 * scale +'px',
             'height':86 * scale + 'px'
         });
@@ -41,14 +41,13 @@ $(document).ready(function(){
             'height':70 * scale + 'px',
             'margin':4 * scale + 'px',
             'padding':4 * scale + 'px'
-
         });
         $('.ImgWindow').css({
             'padding':20 * scale + 'px'
         });
     }
 	function ImgFlash() {
-		$(".ImgBox").stop(true).fadeOut(ImgBoxFlash).fadeIn(ImgBoxFlash);
+		//$(".ImgBox").stop(true).fadeOut(ImgBoxFlash).fadeIn(ImgBoxFlash);
     }
     function ImgWindow(){
         var AlertHtml = '';
@@ -59,7 +58,9 @@ $(document).ready(function(){
         AlertHtml +='<div class="ImgBox">' + ImgText;
         AlertHtml +='<div class="ImgText">' + ImgTit + '</div>';
         AlertHtml +='</div>';
+        AlertHtml +='<div class="ImgListBoxMain">';
         AlertHtml +='<div class="ImgListBox">'+ViewImgHtml+'</div>';
+        AlertHtml +='</div>';
         AlertHtml +='<div class="ImgKey"><span>可用方向键"←"和"→"浏览</span></div>';
         AlertHtml +='<div class="closeBtnIco" ><img src="ico/close.png" /></div>';
 		AlertHtml +='<span class="ImgNumber"></span>';
@@ -78,10 +79,13 @@ $(document).ready(function(){
     }
     //调整位置
     function MoveTo(){
-        var ImgWindowWidth = (-$('.ImgWindow>.ImgBox').outerWidth(true)/2 - 41) * scale;
-        var ImgWindowHeight = (-$('.ImgWindow>.ImgBox').outerHeight(true)/2 - 81.5) * scale;
-        $('.ImgWindow').stop().animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
-        console.log('宽度：' + ImgWindowWidth + '高度：' + ImgWindowHeight);
+        var ImgWindowWidth = ($('.ImgWindow>.ImgBox').outerWidth(true) + 20*scale*2)/2;
+        var ImgWindowHeight = ($('.ImgWindow>.ImgBox').outerHeight(true) + $('.ImgListBoxMain').outerHeight(true) + 20*scale*2 ) / 2;
+        console.log($('.ImgWindow>.ImgBox>img').outerHeight(true));
+        //console.log(ImgWindowWidth + '-' +  ImgWindowHeight);
+        //console.log($('.ImgWindow.ImgBox>img').outerHeight(true));
+        //console.log($('.ImgWindow>.ImgBox').outerWidth(true) + 20*scale*2);
+        $('.ImgWindow').stop().animate({marginLeft:-ImgWindowWidth,marginTop:-ImgWindowHeight});
         LoadIni();
     }
     //点击下方缩略图显示对应图片
@@ -89,21 +93,26 @@ $(document).ready(function(){
 		ImgFlash();
         var ViewImgListSrc = $(this).children('img').attr('src');
         var ViewImgListTit = $(this).children('img').attr('alt');
-        var ViewImgListIndex1 = $(this).index() - 2;
-        var ViewImgListIndex2 = $(this).index() - 1;
-        var ViewImgListIndex3 = $(this).index();
-        var ViewImgListIndex4 = $(this).index() + 1;
-        var ViewImgListIndex5 = $(this).index() + 2;
+        //var ViewImgListIndex1 = $(this).index() - 2;
+        //var ViewImgListIndex2 = $(this).index() - 1;
+        var ViewImgListIndex = $(this).index();
+        //var ViewImgListIndex4 = $(this).index() + 1;
+        //var ViewImgListIndex5 = $(this).index() + 2;
+        //var ViewShowImg = $('.ViewImgList:eq('+ ViewImgListIndex1 +'),.ViewImgList:eq('+ ViewImgListIndex2 +'),.ViewImgList:eq('+ ViewImgListIndex3 +'),.ViewImgList:eq('+ ViewImgListIndex4 +'),.ViewImgList:eq('+ ViewImgListIndex5 +')');
         var ViewImgListLength = $('.ViewImgList').length;
+        var ImgListMove = $(this).outerWidth(true) * ($(this).index()-2);
         $('.ImgBox').children('img').attr('src',''+ ViewImgListSrc +'');
-        MoveTo();
         $('.ImgText').text(''+ ViewImgListTit +'');
         $(this).addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
-        if(ViewImgListIndex1<=0 || ViewImgListIndex5>=ViewImgListLength ) {
+        $('.ImgNumber').text(ViewImgListIndex + 1 + ' / '+ $('.ViewImgList').length);
+        MoveTo();
+        if(ViewImgListIndex < 2 || ViewImgListIndex + 2 >= ViewImgListLength ) {
             return false;
         } else {
-            $('.ViewImgList').siblings('.ViewImgList').hide();
-            $('.ViewImgList:eq('+ ViewImgListIndex1 +'),.ViewImgList:eq('+ ViewImgListIndex2 +'),.ViewImgList:eq('+ ViewImgListIndex3 +'),.ViewImgList:eq('+ ViewImgListIndex4 +'),.ViewImgList:eq('+ ViewImgListIndex5 +')').show();
+            $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+            //$('.ViewImgList').hide();
+            //ViewShowImg.show();
+            //$('.ViewImgList:eq('+ ViewImgListIndex1 +'),.ViewImgList:eq('+ ViewImgListIndex2 +'),.ViewImgList:eq('+ ViewImgListIndex3 +'),.ViewImgList:eq('+ ViewImgListIndex4 +'),.ViewImgList:eq('+ ViewImgListIndex5 +')').show().not('.ViewImgList:eq('+ ViewImgListIndex1 +'),.ViewImgList:eq('+ ViewImgListIndex2 +'),.ViewImgList:eq('+ ViewImgListIndex3 +'),.ViewImgList:eq('+ ViewImgListIndex4 +'),.ViewImgList:eq('+ ViewImgListIndex5 +')').hide();
         }
     });
 
@@ -139,20 +148,36 @@ $(document).ready(function(){
                 }
                 $('.ImgBox').html('<img src="' + ViewImgObj[ImgNumber].url + '" />' + '<div class="ImgText">' + ViewImgObj[ImgNumber].title + '</div>');
                 $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
-                var HideBefore = content.index - 3;
-                var HideAfter = content.index + 1;
-                var MaxImgList = $('.ImgListBox>div.ViewImgList').length - 2;
-                if( content.index > 2 && content.index <= MaxImgList && MaxImgList + 2 > 5 ) {
-                    $('.ViewImgList:eq('+ HideBefore +')').show(100);
-                    $('.ViewImgList:gt('+ HideAfter +')').hide(100);
-                } if(content.index >0 && content.index <= 2 && MaxImgList + 2 <= 5 ) {
-                    $('.ViewImgList:gt(5)').hide(100);
-                    $('.ViewImgList:lt(4)').show(100);
-                } if( content.index <= 0 && MaxImgList + 2 > 5 || content.index > MaxImgList && MaxImgList + 2 > 5 ){
-                    var ghasd = MaxImgList -4;
-                    $('.ViewImgList:gt('+ ghasd +')').show(100);
-                    $('.ViewImgList:lt('+ ghasd +')').hide(100);
+
+                var ImgListMove = $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').outerWidth(true) * (ViewImgObj[ImgNumber].index-2);
+                //$('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+
+                var ViewImgObjMaxLength = $('.ViewImgList').length;
+                if(ViewImgObj[ImgNumber].index <= 2) {
+                    $('.ImgListBox').animate({ 'marginLeft':'0px' });
                 }
+                if(ViewImgObj[ImgNumber].index > 2 && ViewImgObj[ImgNumber].index < ViewImgObjMaxLength - 3) {
+                    $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                }
+                if(ViewImgObj[ImgNumber].index >= ViewImgObjMaxLength - 3) {
+                    ImgListMove = $('.ViewImgList').outerWidth(true) * (ViewImgObjMaxLength-5);
+                    $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                }
+
+                //var HideBefore = content.index - 3;
+                //var HideAfter = content.index + 1;
+                //var MaxImgList = $('.ImgListBox>div.ViewImgList').length - 2;
+                //if( content.index > 2 && content.index <= MaxImgList && MaxImgList + 2 > 5 ) {
+                //    $('.ViewImgList:eq('+ HideBefore +')').show(100);
+                //    $('.ViewImgList:gt('+ HideAfter +')').hide(100);
+                //} if(content.index >0 && content.index <= 2 && MaxImgList + 2 <= 5 ) {
+                //    $('.ViewImgList:gt(5)').hide(100);
+                //    $('.ViewImgList:lt(4)').show(100);
+                //} if( content.index <= 0 && MaxImgList + 2 > 5 || content.index > MaxImgList && MaxImgList + 2 > 5 ){
+                //    var ghasd = MaxImgList -4;
+                //    $('.ViewImgList:gt('+ ghasd +')').show(100);
+                //    $('.ViewImgList:lt('+ ghasd +')').hide(100);
+                //}
 				var FocusImgIndex = ViewImgObj[ImgNumber].index + 1;
 				$('.ImgNumber').text(FocusImgIndex + ' / '+ $('.ViewImgList').length);
             }
@@ -171,16 +196,32 @@ $(document).ready(function(){
                 }
                 $('.ImgBox').html('<img src="' + ViewImgObj[ImgNumber].url + '" />' + '<div class="ImgText">' + ViewImgObj[ImgNumber].title + '</div>');
                 $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
-                var HideBefore = content.index - 1;
-                var HideAfter = content.index + 3;
-                var MaxImgList = $('.ImgListBox>div.ViewImgList').length - 2;
-                if( content.index >= 2 && content.index <= MaxImgList -2 ) {
-                    $('.ViewImgList:lt('+ HideBefore +')').hide(100);
-                    $('.ViewImgList:eq('+ HideAfter +')').show(100);
-                } if ( content.index > MaxImgList) {
-                    $('.ViewImgList:lt(5)').show();
-                    $('.ViewImgList:gt(5)').hide();
+
+                var ImgListMove = $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').outerWidth(true) * (ViewImgObj[ImgNumber].index-2);
+                //$('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+
+                var ViewImgObjMaxLength = $('.ViewImgList').length;
+                if(ViewImgObj[ImgNumber].index <= 2) {
+                    $('.ImgListBox').animate({ 'marginLeft':'0px' });
                 }
+                if(ViewImgObj[ImgNumber].index > 2 && ViewImgObj[ImgNumber].index < ViewImgObjMaxLength - 3) {
+                    $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                }
+                if(ViewImgObj[ImgNumber].index >= ViewImgObjMaxLength - 3) {
+                    ImgListMove = $('.ViewImgList').outerWidth(true) * (ViewImgObjMaxLength-5);
+                    $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                }
+
+                //var HideBefore = content.index - 1;
+                //var HideAfter = content.index + 3;
+                //var MaxImgList = $('.ImgListBox>div.ViewImgList').length - 2;
+                //if( content.index >= 2 && content.index <= MaxImgList -2 ) {
+                //    $('.ViewImgList:lt('+ HideBefore +')').hide(100);
+                //    $('.ViewImgList:eq('+ HideAfter +')').show(100);
+                //} if ( content.index > MaxImgList) {
+                //    $('.ViewImgList:lt(5)').show();
+                //    $('.ViewImgList:gt(5)').hide();
+                //}
 				var FocusImgIndex = ViewImgObj[ImgNumber].index + 1;
 				$('.ImgNumber').text(FocusImgIndex + ' / '+ $('.ViewImgList').length);
             }
@@ -197,39 +238,64 @@ $(document).ready(function(){
         ImgTit = $(this).attr('alt');
         ImgText = '<img src="' + deviceImg + '" />';
         ImgWindow();
-        var ImgWindowWidth = (-$('.ImgWindow').outerWidth(true)/2 - 20) * scale ;
-        var ImgWindowHeight = (-$('.ImgWindow').outerHeight(true)/2 - 10) * scale;
-        $('.ImgWindow').animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
-        console.log('宽度：' + ImgWindowWidth + '高度：' + ImgWindowHeight);
         var Temp1ImgUrl = $(this).attr('src');
+        var ImgIndexLength = $('.ViewImgList').length;
+        //var ImgIndexLength1 = $('.ViewImgList').length - 6;
+        $('.ImgListBox').css({
+            'width': $('.ViewImgList').outerWidth(true) * ImgIndexLength +'px'
+            //'height':86 * scale + 2 * 4 * scale +'px'
+        });
+        //console.log($('.ViewImgList').outerWidth(true) * scale * ImgIndexLength + 'bbb');
         $.each(ViewImgObj,function(index, content){
             if(content.url==Temp1ImgUrl){
                 var Img1Number = content.index;
+                //var MinImgIndex = ViewImgObj[Img1Number].index - 3;
+                //var MaxImgIndex = ViewImgObj[Img1Number].index + 3;
                 if(Img1Number == -1) {
                     Img1Number = JSONIndex;
                 }
-                var MinImgIndex = ViewImgObj[Img1Number].index - 3;
-                var MaxImgIndex = ViewImgObj[Img1Number].index + 3;
-                var ImgIndexLength = $('.ViewImgList').length;
-                var ImgIndexLength1 = $('.ViewImgList').length - 6;
-                if(ImgIndexLength <=5) {
-                    $('.ViewImgList:lt(6)').show();
-                } else {
-                    if(MinImgIndex<0 ) {
-                        $('.ViewImgList:lt(5)').show();
-                    } if (MinImgIndex > ImgIndexLength - 6 ) {
-                        $('.ViewImgList:gt('+ImgIndexLength1+')').show();
-                        $('.ViewImgList:lt('+ImgIndexLength1+')').hide();
-                    } else {
-                        $('.ViewImgList:lt('+MaxImgIndex+'):gt('+MinImgIndex+')').show();
-                    }
+                console.log(Img1Number);
+                var ImgListMove = $('.ViewImgList').outerWidth(true) * (Img1Number-2);
+                //$('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+
+                if(Img1Number <= 2) {
+                    $('.ImgListBox').animate({ 'marginLeft':'0px' });
                 }
+                if(Img1Number > 2 && Img1Number < ImgIndexLength - 3) {
+                    $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                }
+                if(Img1Number >= ImgIndexLength - 3) {
+                    ImgListMove = $('.ViewImgList').outerWidth(true) * (ImgIndexLength-5);
+                    $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                }
+                //else if(Img1Number) {
+                //
+                //}
+                //if(ImgIndexLength <=5) {
+                //    //$('.ViewImgList:lt(6)').show();
+                //    $('.ImgListBox').animate({ 'marginLeft':'0px' });
+                //} else {
+                //    if(MinImgIndex<0 ) {
+                //        //$('.ViewImgList:lt(5)').show();
+                //        //$('.ImgListBox').animate({ 'marginLeft':'0px' });
+                //    } if (MinImgIndex > ImgIndexLength - 6 ) {
+                //        //$('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
+                //        //$('.ViewImgList:gt('+ImgIndexLength1+')').show();
+                //        //$('.ViewImgList:lt('+ImgIndexLength1+')').hide();
+                //    } else {
+                //        //$('.ViewImgList:lt('+MaxImgIndex+'):gt('+MinImgIndex+')').show();
+                //    }
+                //}
                 $('.ViewImgList:eq('+ViewImgObj[Img1Number].index+')').addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
 				var FocusImgIndex = ViewImgObj[Img1Number].index + 1;
 				$('.ImgNumber').text(FocusImgIndex + ' / '+ $('.ViewImgList').length);
             }
         });
         LoadIni();
-		return false;
+        var ImgWindowWidth = (-$('.ImgWindow').outerWidth(true)/2) * scale ;
+        var ImgWindowHeight = (-$('.ImgWindow').outerHeight(true)/2) * scale;
+        $('.ImgWindow').animate({marginLeft:ImgWindowWidth,marginTop:ImgWindowHeight});
+        console.log(ImgWindowWidth + '-' +  ImgWindowHeight);
     });
+    //$('.ViewImg').eq(0).click();
 });
