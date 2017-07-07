@@ -6,7 +6,7 @@
  GitHub:		https://github.com/futureis404/FrigateBird-LightBox
  */
 $(document).ready(function(){
-    var ImgBoxFlash = 300; //闪烁时间
+    var ImgBoxFlash = 400; //闪烁时间
     var OpenBox = 500; //打开时间
     var CloseBox = 500; //关闭时间
     var scale = 1;//缩放大小
@@ -29,7 +29,7 @@ $(document).ready(function(){
             'height':86 * scale + 'px'
         });
         $('.ImgListBox>.ViewImgList').css({
-            'width':100 * scale + 'px',
+            'width':110 * scale + 'px',
             'height':70 * scale + 'px',
             'margin':4 * scale + 'px',
             'padding':4 * scale + 'px'
@@ -39,14 +39,16 @@ $(document).ready(function(){
         });
     }
     function ImgFlash() {
-        $(".ImgBox").stop(true).fadeOut(ImgBoxFlash).fadeIn(ImgBoxFlash);
+        $(".ImgBox").stop(true).fadeOut(ImgBoxFlash,function(){
+            $(".ImgBox").fadeIn(ImgBoxFlash);
+        });
     }
     function ImgWindow(){
         var AlertHtml = '';
         AlertHtml +='<div class="imgmask mask"></div>';
         AlertHtml +='<div class="ImgWindow">';
-        AlertHtml +='<div class="ImgPrev"><img src=/ico/prev.png" /></div>';
-        AlertHtml +='<div class="ImgNext"><img src=/ico/next.png" /></div>';
+        AlertHtml +='<div class="ImgPrev"><img src="/ico/prev.png" /></div>';
+        AlertHtml +='<div class="ImgNext"><img src="/ico/next.png" /></div>';
         AlertHtml +='<div class="ImgBox">' + ImgText;
         AlertHtml +='<div class="ImgText">' + ImgTit + '</div>';
         AlertHtml +='</div>';
@@ -84,7 +86,11 @@ $(document).ready(function(){
         var ViewImgListIndex = $(this).index();
         var ViewImgListLength = $('.ViewImgList').length;
         var ImgListMove = $(this).outerWidth(true) * ($(this).index()-2);
-        $('.ImgBox').children('img').attr('src',''+ ViewImgListSrc +'');
+
+        setTimeout(function(){
+            $('.ImgBox').children('img').attr('src',''+ ViewImgListSrc +'');
+        },ImgBoxFlash/2.5);
+
         $('.ImgText').text(''+ ViewImgListTit +'');
         $(this).addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
         $('.ImgNumber').text(ViewImgListIndex + 1 + ' / '+ $('.ViewImgList').length);
@@ -126,17 +132,21 @@ $(document).ready(function(){
                 if(ImgNumber == -1) {
                     ImgNumber = JSONIndex;
                 }
-                $('.ImgBox').html('<img src="' + ViewImgObj[ImgNumber].url + '" />' + '<div class="ImgText">' + ViewImgObj[ImgNumber].title + '</div>');
+
+                setTimeout(function(){
+                    $('.ImgBox').html('<img src="' + ViewImgObj[ImgNumber].url + '" />' + '<div class="ImgText">' + ViewImgObj[ImgNumber].title + '</div>');
+                },ImgBoxFlash/2.5);
+
                 $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
                 var ImgListMove = $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').outerWidth(true) * (ViewImgObj[ImgNumber].index-2);
                 var ViewImgObjMaxLength = $('.ViewImgList').length;
-                if(ViewImgObj[ImgNumber].index <= 2) {
+                if(ViewImgObj[ImgNumber].index <= 2 && ViewImgObjMaxLength > 5 ) {
                     $('.ImgListBox').animate({ 'marginLeft':'0px' });
                 }
-                if(ViewImgObj[ImgNumber].index > 2 && ViewImgObj[ImgNumber].index < ViewImgObjMaxLength - 3) {
+                if(ViewImgObj[ImgNumber].index > 2 && ViewImgObj[ImgNumber].index < ViewImgObjMaxLength - 3 && ViewImgObjMaxLength > 5) {
                     $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
                 }
-                if(ViewImgObj[ImgNumber].index >= ViewImgObjMaxLength - 3) {
+                if(ViewImgObj[ImgNumber].index >= ViewImgObjMaxLength - 3 && ViewImgObjMaxLength > 5) {
                     ImgListMove = $('.ViewImgList').outerWidth(true) * (ViewImgObjMaxLength-5);
                     $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
                 }
@@ -156,17 +166,20 @@ $(document).ready(function(){
                 if(ImgNumber > JSONIndex) {
                     ImgNumber = 0;
                 }
-                $('.ImgBox').html('<img src="' + ViewImgObj[ImgNumber].url + '" />' + '<div class="ImgText">' + ViewImgObj[ImgNumber].title + '</div>');
+                setTimeout(function(){
+                    $('.ImgBox').html('<img src="' + ViewImgObj[ImgNumber].url + '" />' + '<div class="ImgText">' + ViewImgObj[ImgNumber].title + '</div>');
+                },ImgBoxFlash/2.5);
+
                 $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').addClass('ViewImgListFocus').siblings('.ViewImgList').removeClass('ViewImgListFocus');
                 var ImgListMove = $('.ViewImgList:eq('+ViewImgObj[ImgNumber].index+')').outerWidth(true) * (ViewImgObj[ImgNumber].index-2);
                 var ViewImgObjMaxLength = $('.ViewImgList').length;
-                if(ViewImgObj[ImgNumber].index <= 2) {
+                if(ViewImgObj[ImgNumber].index <= 2 && ViewImgObjMaxLength > 5 ) {
                     $('.ImgListBox').animate({ 'marginLeft':'0px' });
                 }
-                if(ViewImgObj[ImgNumber].index > 2 && ViewImgObj[ImgNumber].index < ViewImgObjMaxLength - 3) {
+                if(ViewImgObj[ImgNumber].index > 2 && ViewImgObj[ImgNumber].index < ViewImgObjMaxLength - 3 && ViewImgObjMaxLength > 5) {
                     $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
                 }
-                if(ViewImgObj[ImgNumber].index >= ViewImgObjMaxLength - 3) {
+                if(ViewImgObj[ImgNumber].index >= ViewImgObjMaxLength - 3 && ViewImgObjMaxLength > 5) {
                     ImgListMove = $('.ViewImgList').outerWidth(true) * (ViewImgObjMaxLength-5);
                     $('.ImgListBox').animate({ 'marginLeft':-ImgListMove+'px' });
                 }
@@ -189,7 +202,7 @@ $(document).ready(function(){
         var Temp1ImgUrl = $(this).attr('src');
         var ImgIndexLength = $('.ViewImgList').length;
         $('.ImgListBox').css({
-            'width': $('.ViewImgList').outerWidth(true) * ImgIndexLength +'px'
+            'width': $('.ViewImgList').outerWidth(true) * ImgIndexLength * 1.2 +'px'
         });
         $.each(ViewImgObj,function(index, content){
             if(content.url==Temp1ImgUrl){
