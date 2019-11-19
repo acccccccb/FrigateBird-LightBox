@@ -1,7 +1,7 @@
 # FrigateBird-LightBox
 ![FrigateBird-LightBox](https://raw.githubusercontent.com/futureis404/FrigateBird-LightBox/master/gallery-img/thumb.jpg)
 #### 版本：v1.0.0
-#### 网站：http://www.python-pro.com
+#### 网站：http://www.ihtmlcss.com
 #### 使用说明：
 + 下载zip文件
 + 在head部分引入css文件
